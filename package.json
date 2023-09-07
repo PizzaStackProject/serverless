@@ -1,0 +1,27 @@
+{
+  "name": "severless",
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {
+    "start": "netlify dev",
+    "codegen": "graphql-codegen --config codegen.yaml"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "^5.0.0",
+    "@graphql-codegen/typescript-resolvers": "^4.0.1",
+    "@netlify/functions": "^2.0.2",
+    "@types/node": "^20.5.9",
+    "netlify-cli": "^16.3.1",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "@graphql-codegen/typescript": "^4.0.1",
+    "@graphql-codegen/typescript-graphql-request": "^5.0.0",
+    "@graphql-codegen/typescript-operations": "^4.0.1",
+    "crypto": "^1.0.1",
+    "graphql": "^16.8.0",
+    "graphql-request": "^6.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "pbkdf2": "^3.1.2"
+  }
+}
