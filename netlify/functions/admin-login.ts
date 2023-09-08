@@ -32,17 +32,6 @@ const handler: Handler = async (event, context) => {
 
   const accessToken = signToken(data.admin[0].id)
 
-  // const accessToken = jwt.sign(
-  //   {
-  //     "https://hasura.io/jwt/claims": {
-  //       "x-hasura-default-role": "admin",
-  //       "x-hasura-allowed-roles": ["admin"],
-  //       "x-hasura-user-id": data.insert_admin_one?.id,
-  //     },
-  //   },
-  //   "E0pFuRteHc14J0S6BKO85sIQsNbYGS1f"
-  // );
-
   return {
     statusCode: 200,
     body: JSON.stringify({ accessToken }),

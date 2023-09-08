@@ -22,14 +22,7 @@ const handler: Handler = async (event, context) => {
     { id: adminId },
     { "x-hasura-admin-secret": "myadminsecretkey" }
   );
-
-  //   const input: AdminLoginInput = JSON.parse(body!).input.admin;
-
-  //   const data = await api.GetAdminByUsername(
-  //     { username: input.username },
-  //     { "x-hasura-admin-secret": "myadminsecretkey" }
-  //   );
-
+  
   return {
     statusCode: 200,
     body: JSON.stringify({id:adminId, username: data.admin_by_pk?.username }),
