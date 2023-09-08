@@ -19,6 +19,11 @@ export type Scalars = {
   uuid: { input: any; output: any; }
 };
 
+export type AdminGetOutput = {
+  __typename?: 'AdminGetOutput';
+  username: Scalars['String']['output'];
+};
+
 export type AdminLoginInput = {
   password: Scalars['String']['input'];
   username: Scalars['String']['input'];
@@ -485,8 +490,6 @@ export type Menu_Variance_Fields = {
 /** mutation root */
 export type Mutation_Root = {
   __typename?: 'mutation_root';
-  /** Login Admin */
-  adminLogin?: Maybe<AdminLoginOutput>;
   /** Admin Registration */
   adminRegister?: Maybe<AdminRegisterOutput>;
   /** delete data from the table: "admin" */
@@ -517,12 +520,6 @@ export type Mutation_Root = {
   update_menu_by_pk?: Maybe<Menu>;
   /** update multiples rows of table: "menu" */
   update_menu_many?: Maybe<Array<Maybe<Menu_Mutation_Response>>>;
-};
-
-
-/** mutation root */
-export type Mutation_RootAdminLoginArgs = {
-  arg1: AdminLoginInput;
 };
 
 
@@ -658,10 +655,13 @@ export type Query_Root = {
   __typename?: 'query_root';
   /** fetch data from the table: "admin" */
   admin: Array<Admin>;
+  /** Login Admin */
+  adminLogin?: Maybe<AdminLoginOutput>;
   /** fetch aggregated fields from the table: "admin" */
   admin_aggregate: Admin_Aggregate;
   /** fetch data from the table: "admin" using primary key columns */
   admin_by_pk?: Maybe<Admin>;
+  getMe?: Maybe<AdminGetOutput>;
   /** fetch data from the table: "menu" */
   menu: Array<Menu>;
   /** fetch aggregated fields from the table: "menu" */
@@ -677,6 +677,11 @@ export type Query_RootAdminArgs = {
   offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Admin_Order_By>>;
   where?: InputMaybe<Admin_Bool_Exp>;
+};
+
+
+export type Query_RootAdminLoginArgs = {
+  admin: AdminLoginInput;
 };
 
 
@@ -816,6 +821,13 @@ export type GetAdminByUsernameQueryVariables = Exact<{
 
 export type GetAdminByUsernameQuery = { __typename?: 'query_root', admin: Array<{ __typename?: 'admin', id: any, password: string }> };
 
+export type AdminGetMeQueryVariables = Exact<{
+  id: Scalars['uuid']['input'];
+}>;
+
+
+export type AdminGetMeQuery = { __typename?: 'query_root', admin_by_pk?: { __typename?: 'admin', username: string } | null };
+
 export type InsertAdminMutationVariables = Exact<{
   password: Scalars['String']['input'];
   username: Scalars['String']['input'];
@@ -830,6 +842,13 @@ export const GetAdminByUsernameDocument = gql`
   admin(where: {username: {_eq: $username}}) {
     id
     password
+  }
+}
+    `;
+export const AdminGetMeDocument = gql`
+    query AdminGetMe($id: uuid!) {
+  admin_by_pk(id: $id) {
+    username
   }
 }
     `;
@@ -850,6 +869,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
   return {
     GetAdminByUsername(variables: GetAdminByUsernameQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetAdminByUsernameQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetAdminByUsernameQuery>(GetAdminByUsernameDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetAdminByUsername', 'query');
+    },
+    AdminGetMe(variables: AdminGetMeQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<AdminGetMeQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<AdminGetMeQuery>(AdminGetMeDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'AdminGetMe', 'query');
     },
     InsertAdmin(variables: InsertAdminMutationVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<InsertAdminMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<InsertAdminMutation>(InsertAdminDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'InsertAdmin', 'mutation');
