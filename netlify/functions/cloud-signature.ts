@@ -4,9 +4,9 @@ import { getAdminFromHeaders } from "../common/getAdminFromHeaders";
 import { GetAdminByIdQuery } from "../common/sdk";
 
 cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET,
   secure: true,
 });
 
@@ -16,8 +16,8 @@ const handler: Handler = async (event, context) => {
   let admin: GetAdminByIdQuery;
   try {
     admin = await getAdminFromHeaders(headers);
-  } catch (e) {
-    return JSON.parse(e.message);
+  } catch (error) {
+    return JSON.parse(error.message);
   }
 
   if (!admin.admin_by_pk?.id) {
@@ -27,12 +27,12 @@ const handler: Handler = async (event, context) => {
     };
   }
 
-  const timeStamp = Math.round(new Date().getTime() / 1000);
-  const publicId = `menu-${timeStamp}`;
+  const timestamp = Math.round(new Date().getTime() / 1000);
+  const publicId = `menu-${timestamp}`;
 
   const signature = cloudinary.utils.api_sign_request(
     {
-      timeStamp,
+      timestamp,
       folder: "menu",
       public_id: publicId,
     },
@@ -42,10 +42,10 @@ const handler: Handler = async (event, context) => {
   return {
     statusCode: 200,
     body: JSON.stringify({
-      signature,
       apiKey: process.env.API_KEY,
-      timeStamp,
       cloudName: process.env.CLOUD_NAME,
+      signature,
+      timestamp,
       publicId,
     }),
   };
