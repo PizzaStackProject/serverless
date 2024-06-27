@@ -1,31 +1,22 @@
 import { Handler } from "@netlify/functions";
-import { GraphQLClient } from "graphql-request";
 
-import { getSdk } from "../common/sdk";
-import * as crypto from "crypto";
 import { hashPassword } from "../common/password";
 import { signToken } from "../common/jwt";
 import { api } from "../common/api";
 import { AdminRegisterInput } from "../common/sdk";
 import { config } from "../core/config";
+import { verifyHasura } from "../common/verifyHasura";
 
 const handler: Handler = async (event, context) => {
   const { body, headers } = event;
 
-  if (
-    !headers["x-pizzastack-secret-key"] ||
-    headers["x-pizzastack-secret-key"] !== config.hasuraPizzastackSecret
-  ) {
-    return {
-      statusCode: 403,
-      body: JSON.stringify({
-        message: "x-pizzastack-secret-key is missing or invalid  ",
-      }),
-    };
+  try {
+    verifyHasura(headers);
+  } catch (error) {
+    return JSON.parse(error.message);
   }
 
   const input: AdminRegisterInput = JSON.parse(body!).input.admin;
-
   const password = hashPassword(input.password);
 
   const data = await api.InsertAdmin(

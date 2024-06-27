@@ -7,6 +7,7 @@
     "codegen": "graphql-codegen --config codegen.yaml"
   },
   "devDependencies": {
+    "@faker-js/faker": "^8.4.1",
     "@graphql-codegen/cli": "^5.0.0",
     "@graphql-codegen/typescript-resolvers": "^4.0.1",
     "@netlify/functions": "^2.0.2",
