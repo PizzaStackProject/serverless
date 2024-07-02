@@ -8,11 +8,15 @@ import { DateTime } from "luxon";
 
 const handler: Handler = async (event, context) => {
   const { headers, queryStringParameters } = event;
-  const { amount: amountRow = "1", recent: recentRow = "0" } =
-    queryStringParameters;
+  const {
+    amount: amountRow = "1",
+    recent: recentRow = "0",
+    forceCreate: forceCreateRaw = "false",
+  } = queryStringParameters;
 
   const amount = Number(amountRow);
   const recent = Number(recentRow);
+  const forceCreate = forceCreateRaw === "true";
 
   try {
     verifyHasura(headers);
@@ -23,11 +27,12 @@ const handler: Handler = async (event, context) => {
   const currentHour = DateTime.now().hour;
   const isWorkingHours = currentHour >= 8 && currentHour <= 22;
 
-  if (!isWorkingHours) {
+  if (!isWorkingHours && !forceCreate) {
     return {
-    statusCode: 200,
-    body: JSON.stringify({ status: "Not working in this hours" }),
-  };
+      statusCode: 200,
+      body: JSON.stringify({ status: "Not working in this hours" }),
+    };
+  }
 
   const categories = await api.GetCategories();
 
