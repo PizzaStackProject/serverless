@@ -4,6 +4,7 @@ import { api } from "../common/api";
 import { config } from "../core/config";
 import { verifyHasura } from "../common/verifyHasura";
 import { CreateFakeOrderMutationVariables } from "../common/sdk";
+import { DateTime } from "luxon";
 
 const handler: Handler = async (event, context) => {
   const { headers, queryStringParameters } = event;
@@ -18,6 +19,15 @@ const handler: Handler = async (event, context) => {
   } catch (error) {
     return JSON.parse(error.message);
   }
+
+  const currentHour = DateTime.now().hour;
+  const isWorkingHours = currentHour >= 8 && currentHour <= 22;
+
+  if (!isWorkingHours) {
+    return {
+    statusCode: 200,
+    body: JSON.stringify({ status: "Not working in this hours" }),
+  };
 
   const categories = await api.GetCategories();
 
