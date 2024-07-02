@@ -1,0 +1,5 @@
+query GetMenuItemByCategoryId($categoryId: uuid) {
+  menu(where: { category_id: { _eq: $categoryId } }) {
+    id
+  }
+}

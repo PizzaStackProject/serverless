@@ -7,10 +7,12 @@
     "codegen": "graphql-codegen --config codegen.yaml"
   },
   "devDependencies": {
+    "@faker-js/faker": "^8.4.1",
     "@graphql-codegen/cli": "^5.0.0",
     "@graphql-codegen/typescript-resolvers": "^4.0.1",
     "@netlify/functions": "^2.0.2",
     "@types/node": "^20.6.2",
+    "@types/luxon": "^3.4.2",
     "netlify-cli": "^16.3.1",
     "typescript": "^5.2.2"
   },
@@ -23,6 +25,7 @@
     "graphql": "^16.8.0",
     "graphql-request": "^6.1.0",
     "jsonwebtoken": "^9.0.2",
+    "luxon": "^3.4.4",
     "pbkdf2": "^3.1.2"
   }
 }
